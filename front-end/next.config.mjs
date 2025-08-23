@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 
-    output: "export",
+    // output: "export",
 
     eslint: {
     // Warning: Điều này cho phép build thành công ngay cả khi có lỗi ESLint
