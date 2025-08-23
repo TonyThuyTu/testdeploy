@@ -123,7 +123,7 @@ export default function AddVoucherModal({ show, handleClose, onSuccess }) {
     };
 
    try {
-      await axios.post('${API_CONFIG.getApiUrl("/voucher")}', payload);
+      await axios.post(API_CONFIG.getApiUrl("/voucher"), payload);
       // alert('🎉 Tạo voucher thành công!');
       toast.success("Tạo voucher thành công!");
       setForm({ ...defaultForm });

@@ -71,7 +71,7 @@ export default function OptionsManager({ options, setOptions }) {
         </Form.Select>
         </Col>
         <Col sm="auto">
-          <Button onClick={addOption}>Thêm Option</Button>
+          <Button onClick={addOption} disabled={options.length >= 2}>Thêm Option</Button>
         </Col>
       </Row>
 
