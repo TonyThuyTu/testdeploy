@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
+    output: "export",
+
     eslint: {
     // Warning: Điều này cho phép build thành công ngay cả khi có lỗi ESLint
     ignoreDuringBuilds: true,
+    
   },
   images: {
     remotePatterns: [
