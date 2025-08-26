@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { API_CONFIG } from "@/config/api";
 
 function VerifyOtpContent() {
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(180);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [canResend, setCanResend] = useState(false);
   const [error, setError] = useState("");
@@ -103,7 +103,7 @@ function VerifyOtpContent() {
 
       setMessage("Đã gửi lại mã OTP.");
       setOtp(["", "", "", "", "", ""]);
-      setTimeLeft(60);
+      setTimeLeft(180);
       setCanResend(false);
       inputsRef.current[0]?.focus();
     } catch (err) {

@@ -13,25 +13,49 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Kết nối MySQL
-sequelize.authenticate()
-  .then(() => {
-    console.log('✅ Kết nối MySQL qua Sequelize thành công!');
-    // Khởi động server
+(async () => {
+  try {
+    // Kết nối MySQL
+    await sequelize.authenticate();
+    console.log('✅ Kết nối MySQL thành công!');
+
+    // Kết nối Redis
+    await redisClient.connect();
+    console.log('✅ Redis đã kết nối thành công!');
+
+    // Start server
     app.listen(PORT, () => {
-      console.log(process.env.MOMO_REDIRECT_URL);
       console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
     });
-  })
-  .catch((err) => {
-    console.error('❌ Kết nối MySQL thất bại:', err);
-  });
 
+  } catch (err) {
+    console.error('❌ Lỗi khi kết nối MySQL hoặc Redis:', err);
+  }
+})();
 
 // Middlewares
+// CORS config trực tiếp trong server.js
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://www.taobro.click',
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true, // Cho phép gửi cookie qua trình duyệt
+  origin: function (origin, callback) {
+    // Log origin để debug
+    console.log('🌍 Request từ origin:', origin);
+
+    if (!origin) return callback(null, true); // Cho phép Postman, server-side
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`❌ Not allowed by CORS: ${origin}`));
+    }
+  },
+  credentials: true, // Cho phép cookie/token gửi kèm
 }));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

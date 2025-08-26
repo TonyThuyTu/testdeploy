@@ -38,7 +38,7 @@ export default function CheckoutPage({ idCustomer }) {
   // Load applied voucher from localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     try {
       const savedVoucher = localStorage.getItem('appliedVoucher');
       if (savedVoucher) {
@@ -106,10 +106,10 @@ export default function CheckoutPage({ idCustomer }) {
         const cartData = Array.isArray(raw.data)
           ? raw.data
           : Array.isArray(raw.items)
-          ? raw.items
-          : Array.isArray(raw)
-          ? raw
-          : [];
+            ? raw.items
+            : Array.isArray(raw)
+              ? raw
+              : [];
         setCartItems(cartData);
       } catch (err) {
         console.error("Lỗi khi fetch giỏ hàng:", err);
@@ -213,6 +213,7 @@ export default function CheckoutPage({ idCustomer }) {
             price: item.price,
             attribute_values: item.attribute_values,
             attribute_value_ids: item.attribute_value_ids || [],
+            id_variant: item.id_variant,
             products_item: optionDesc,
           };
         }),
@@ -228,10 +229,7 @@ export default function CheckoutPage({ idCustomer }) {
         window.location.href = res.data.payUrl;
       } else {
         toast.success("Đặt hàng thành công!");
-        
-        // Clear applied voucher after successful order
         localStorage.removeItem('appliedVoucher');
-        
         router.push(`/thankyou?order_id=${res.data.order_id}`);
       }
     } catch (error) {
@@ -275,12 +273,12 @@ export default function CheckoutPage({ idCustomer }) {
         </Col>
         <Col md={5}>
           <Card className="p-3 mb-3 shadow-sm border-0 d-flex flex-column">
-            <CheckoutCart 
-            cartItems={cartItems}
-            onCheckout={handleCheckout} 
-            submitting={submitting}
-            onTotalChange={handleTotalChange}
-            appliedVoucher={appliedVoucher}
+            <CheckoutCart
+              cartItems={cartItems}
+              onCheckout={handleCheckout}
+              submitting={submitting}
+              onTotalChange={handleTotalChange}
+              appliedVoucher={appliedVoucher}
             />
           </Card>
         </Col>

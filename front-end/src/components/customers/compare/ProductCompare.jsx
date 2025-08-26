@@ -227,7 +227,7 @@ export default function ProductCompare() {
                                 <div>
                                   {attr.values && attr.values.map((value, valueIndex) => (
                                     <Badge key={valueIndex} bg="secondary" className="me-1 mb-1">
-                                      {value.value || 'N/A'}
+                                      {attr.type === 2 ? value.value_note : value.value}
                                     </Badge>
                                   ))}
                                 </div>

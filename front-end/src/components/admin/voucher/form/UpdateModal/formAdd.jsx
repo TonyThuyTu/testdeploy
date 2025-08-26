@@ -1,25 +1,6 @@
 import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
-// Format phần trăm: 2 => "2%", 2.5 => "2.50%"
-function formatPercent(value) {
-  const num = Number(value);
-  if (isNaN(num)) return '';
-  return Number.isInteger(num) ? `${num}%` : `${num.toFixed(2)}%`;
-}
-
-// Format tiền VND
-function formatVND(value) {
-  const num = Number(value);
-  if (isNaN(num)) return '';
-  
-  const options = num % 1 === 0
-    ? { style: 'currency', currency: 'VND', minimumFractionDigits: 0 }
-    : { style: 'currency', currency: 'VND', minimumFractionDigits: 2 };
-
-  return num.toLocaleString('vi-VN', options);
-}
-
 export default function FormAdd({ form, handleChange }) {
   return (
     <>
@@ -69,15 +50,16 @@ export default function FormAdd({ form, handleChange }) {
             <Form.Control
               type="text"
               name="discount_value"
-              value={form.discount_value || ''}
-              onChange={handleChange}
+              value={
+                form.discount_value
+                  ? form.discount_type === 'percent'
+                    ? `${form.discount_value}%`
+                    : `${Number(form.discount_value).toLocaleString('vi-VN')} ₫`
+                  : ''
+              }
+              onChange={(e) => handleChange(e)}
               placeholder={form.discount_type === 'fixed' ? 'VNĐ' : '%'}
             />
-            <Form.Text className="text-muted">
-              {form.discount_type === 'fixed'
-                ? formatVND(form.discount_value)
-                : formatPercent(form.discount_value)}
-            </Form.Text>
           </Form.Group>
         </Col>
 
@@ -87,16 +69,14 @@ export default function FormAdd({ form, handleChange }) {
             <Form.Control
               type="text"
               name="min_order_value"
-              value={form.min_order_value || ''}
+              value={form.min_order_value ? `${Number(form.min_order_value).toLocaleString('vi-VN')} ₫` : ''}
               onChange={handleChange}
               placeholder="VNĐ"
             />
-            <Form.Text className="text-muted">{formatVND(form.min_order_value)}</Form.Text>
           </Form.Group>
         </Col>
       </Row>
 
-      {/* Các phần còn lại giữ nguyên như bạn đã làm */}
       <Row>
         <Col md={6}>
           <Form.Group className="mb-3">

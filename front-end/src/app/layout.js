@@ -4,6 +4,7 @@ import RouteLoadingProvider from "@/components/loading/RouteLoading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CompareProvider } from "../contexts/CompareContext";
+import Script from "next/script";
 
 import "./globals.css";
 import "../../public/assets/css/bootstrap.min.css";
@@ -50,6 +51,25 @@ export default function RootLayout({ children }) {
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap"
+        />
+
+        {/* chatbot */}
+        <Script
+          id="chatfuel-widget"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var script = document.createElement('script');
+                script.dataset.bot = "68ac2b7c2a80a9af7959044a"; // ID bot của bạn
+                script.dataset.zindex = "99999";
+                script.src = "https://panel.chatfuel.com/widgets/chat-widget/chat-widget.js";
+                script.async = true;
+                script.defer = true;
+                document.getElementsByTagName('head')[0].appendChild(script);
+              })();
+            `,
+          }}
         />
       </head>
       <body className={`${roboto.variable} ${robotoMono.variable}`}>

@@ -24,13 +24,11 @@ export default function ProductVariantsPage({ productId }) {
   const fetchProductDetails = async () => {
     try {
       const response = await axios.get(API_CONFIG.getApiUrl(`/variants/admin/${productId}`));
-      console.log('Full API Response:', response.data); // Debug log
-      
       // API trả về dữ liệu trong response.data.product
       const productData = response.data.product || response.data;
       console.log('Product Data:', productData); // Debug log
       setProduct(productData);
-      
+
       if (response.data.attributes) {
         const transformedOptions = response.data.attributes.map(attr => ({
           id: attr.id_attribute,
@@ -42,20 +40,20 @@ export default function ProductVariantsPage({ productId }) {
             value: val.value,
             value_note: val.value_note,
             status: val.status,
-            images: [] 
+            images: []
           }))
         }));
         console.log('🔍 Transformed options:', transformedOptions);
         setOptions(transformedOptions);
       }
-      
+
       if (response.data.skus && response.data.skus.length > 0) {
         const transformedSkus = response.data.skus.map(sku => ({
           combo: sku.option_combo.map(combo => ({
-            label: combo.type === 2 ? 
+            label: combo.type === 2 ?
               (response.data.attributes
                 .find(attr => attr.name === combo.attribute)?.values
-                .find(val => val.value === combo.value)?.value_note || combo.value) 
+                .find(val => val.value === combo.value)?.value_note || combo.value)
               : combo.value,
             value: combo.value,
             optionName: combo.attribute,
@@ -64,7 +62,7 @@ export default function ProductVariantsPage({ productId }) {
           })),
           price_sale: sku.price_sale || 0,
           quantity: sku.quantity || 0,
-          status: sku.status === 1 ? 2 : 1, 
+          status: sku.status === 1 ? 2 : 1,
           main_image_index: null,
           images: (sku.images || []).map(img => ({
             url: img.Img_url,
@@ -89,30 +87,30 @@ export default function ProductVariantsPage({ productId }) {
     setIsSaving(true);
     try {
       const formData = new FormData();
-      
+
       // Gửi attributes với đúng format
       formData.append('attributes', JSON.stringify(options));
-      
+
       const transformedVariants = skuList.map(sku => ({
         combination: sku.combo.map(c => ({
-          attributeName: c.optionName, 
+          attributeName: c.optionName,
           value: c.value // Giữ nguyên value gốc (hex code cho màu, text cho size)
         })),
         price_sale: sku.price_sale || 0,
         quantity: sku.quantity || 0,
         status: sku.status === 2 ? 1 : 0, // Convert Frontend: 2=Hiển thị→1=active, 1=Ẩn→0=inactive
-        sku: sku.sku || '', 
-        images: sku.images || [], 
-        variant_id: sku.variant_id || null 
+        sku: sku.sku || '',
+        images: sku.images || [],
+        variant_id: sku.variant_id || null
       }));
-      
+
       formData.append('variants', JSON.stringify(transformedVariants));
 
       // Xử lý ảnh theo option nếu có
       options.forEach(option => {
         option.values.forEach(value => {
           (value.images || []).forEach(img => {
-            if (img.file) { 
+            if (img.file) {
               formData.append('optionImages', img.file);
               formData.append('optionImageIsMain', img.isMain === 1 ? 'true' : 'false');
               formData.append('optionImageValues', value.label);
@@ -125,7 +123,7 @@ export default function ProductVariantsPage({ productId }) {
       const variantImageData = [];
       skuList.forEach((sku, skuIndex) => {
         (sku.images || []).forEach(img => {
-          if (img.file) { 
+          if (img.file) {
             formData.append('variantImages', img.file);
             variantImageData.push({
               variantIndex: skuIndex,
@@ -149,7 +147,7 @@ export default function ProductVariantsPage({ productId }) {
 
       toast.success('Cập nhật biến thể thành công!');
       fetchProductDetails();
-      
+
     } catch (error) {
       console.error('Error saving variants:', error);
       console.error('Error details:', error.response?.data);
@@ -255,11 +253,11 @@ export default function ProductVariantsPage({ productId }) {
               <i className="bi bi-arrow-left me-2"></i>
               Quay lại
             </Button>
-            
+
             <div className="d-flex gap-3">
               {options.length > 0 && (
-                <Button 
-                  variant="success" 
+                <Button
+                  variant="success"
                   onClick={handleSaveVariants}
                   disabled={isSaving}
                 >
@@ -276,9 +274,9 @@ export default function ProductVariantsPage({ productId }) {
                   )}
                 </Button>
               )}
-              
-              <Button 
-                variant="primary" 
+
+              <Button
+                variant="primary"
                 onClick={handleComplete}
               >
                 <i className="bi bi-check-circle me-2"></i>
@@ -291,7 +289,7 @@ export default function ProductVariantsPage({ productId }) {
           {options.length === 0 && (
             <Alert variant="info" className="mt-4">
               <i className="bi bi-lightbulb me-2"></i>
-              <strong>Hướng dẫn:</strong> Thêm ít nhất 1 thuộc tính (như Màu sắc, Dung lượng) để tạo các biến thể sản phẩm. 
+              <strong>Hướng dẫn:</strong> Thêm ít nhất 1 thuộc tính (như Màu sắc, Dung lượng) để tạo các biến thể sản phẩm.
               Nếu sản phẩm không có biến thể, bạn có thể bỏ qua bước này và nhấn "Hoàn tất".
             </Alert>
           )}

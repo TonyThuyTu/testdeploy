@@ -193,7 +193,7 @@ export default function BasicInfo({
 
           <div className="row pb-3">
             <div className="col d-grid">
-              <button className="btn btn-success btn-lg">Mua ngay</button>
+              <a href="https://zalo.me/0777527125" className="btn btn-success btn-lg">Liên Hệ</a>
             </div>
             <div className="col d-grid">
               <button

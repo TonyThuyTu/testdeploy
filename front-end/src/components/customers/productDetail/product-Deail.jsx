@@ -12,9 +12,10 @@ import ProductReview from "./productReview";
 import ProductSpec from "./productSpec";
 import ProductOptions from "./productOptions";
 import ProductTitle from "./productTitle";
-import RelatedProducts from "./relatedProducts";
+// import RelatedProducts from "./relatedProducts";
+import API_CONFIG from "@/config/api";
 
-const baseURL = "http://localhost:5000";
+const baseURL = API_CONFIG.BACKEND_URL;
 
 export default function ProductDeatail({ product, productId }) {
   const params = useParams();
@@ -30,7 +31,7 @@ export default function ProductDeatail({ product, productId }) {
   const [isOutOfStock, setIsOutOfStock] = useState(false);
 
   console.log(product);
-  
+
   // Hàm giải mã token lấy id_customer
   const getCustomerIdFromToken = () => {
     const token = localStorage.getItem("token");
@@ -239,15 +240,15 @@ export default function ProductDeatail({ product, productId }) {
         </aside>
       </section>
 
-      <ProductDescription 
-      description={productData.products_description || ''} 
+      <ProductDescription
+        description={productData.products_description || ''}
       />
-      <ProductSpec 
-      specs={productData.specs || []}
-       />
+      <ProductSpec
+        specs={productData.specs || []}
+      />
       <ProductReview
-      id_products={productData.id_products}
-      id_customer={idCustomer}
+        id_products={productData.id_products}
+        id_customer={idCustomer}
       />
       {/* <RelatedProducts
         categoryId={productData.category_id}

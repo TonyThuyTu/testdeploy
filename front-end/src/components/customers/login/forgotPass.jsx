@@ -47,7 +47,7 @@ export default function ForgotPass() {
             <form onSubmit={handleSendOTP}>
               <div className="mb-3">
                 <label htmlFor="emailOrPhone" className="form-label">
-                  Email hoặc Số điện thoại:
+                  Email:
                 </label>
                 <input
                   type="text"
@@ -56,7 +56,7 @@ export default function ForgotPass() {
                   value={phoneOrEmail}
                   onChange={(e) => setPhoneOrEmail(e.target.value)}
                   required
-                  placeholder="Nhập email hoặc số điện thoại"
+                  placeholder="Nhập email"
                 />
               </div>
 

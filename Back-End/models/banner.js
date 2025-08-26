@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Banner = sequelize.define('Banner', {
+  const Banner = sequelize.define('banner', {
     id_banner: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:true,
     },
   }, {
-    tableName: 'Banner',
+    tableName: 'banner',
     timestamps: false
   });
 

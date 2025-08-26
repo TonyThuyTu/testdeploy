@@ -38,7 +38,7 @@ const uploadProduct = multer({
   fileFilter,
   limits: {
     fileSize: 50 * 1024 * 1024, // tối đa 50MB mỗi file
-    files: 30, // tối đa 30 file
+    files: 100, // tối đa 30 file
     fieldSize: 20 * 1024 * 1024, // tối đa 20MB cho field
     fieldNameSize: 200, // tối đa 200 ký tự cho tên field
     fields: 100, // tối đa 100 field

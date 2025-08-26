@@ -51,10 +51,41 @@ export default function BannerModal({
       return;
     }
 
-    // Validate file size - minimum 9MB for banners
+    // Validate file size
     const fileSizeInMB = file.size / (1024 * 1024);
-    const minSize = 0; // 9MB
-    const maxSize = 20; // 20MB maximum
+
+    let minSize = 0;
+    let maxSize = 0;
+
+    if (type === 1) {
+      // Ảnh
+      minSize = 0;   // tối thiểu 2MB
+      maxSize = 2;   // ví dụ thêm max 5MB để tránh ảnh quá nặng
+    } else {
+      // Video
+      minSize = 0;  // tối thiểu 10MB
+      maxSize = 10;  // tối đa 20MB
+    }
+
+    if (fileSizeInMB < minSize) {
+      toast.error(
+        `${type === 1 ? "Ảnh" : "Video"} phải có dung lượng tối thiểu ${minSize}MB. File hiện tại: ${fileSizeInMB.toFixed(2)}MB`
+      );
+      setSelectedFile(null);
+      setPreview(initialImageUrl || null);
+      if (fileInputRef.current) fileInputRef.current.value = null;
+      return;
+    }
+
+    if (fileSizeInMB > maxSize) {
+      toast.error(
+        `${type === 1 ? "Ảnh" : "Video"} không được vượt quá ${maxSize}MB. File hiện tại: ${fileSizeInMB.toFixed(2)}MB`
+      );
+      setSelectedFile(null);
+      setPreview(initialImageUrl || null);
+      if (fileInputRef.current) fileInputRef.current.value = null;
+      return;
+    }
 
     if (fileSizeInMB < minSize) {
       toast.error(`File banner phải có dung lượng tối thiểu ${minSize}MB. File hiện tại: ${fileSizeInMB.toFixed(2)}MB`);
